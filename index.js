@@ -17,9 +17,6 @@ app.get('/', (request, response) => {
   response.json({ info: 'Node.js, Express, and Postgres API' })
 })
 
-// GET all users
-
-
 // SET the HTTP request method, the endpoint URL path, and the relevant function for each endpoint:
 
 app.get('/users', db.getUsers)
