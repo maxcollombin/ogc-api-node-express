@@ -1,13 +1,14 @@
-// Configuration of the PostreSQL connection
-// This will eventually have to be integrated into  a separate .env file
+// Configuration of the PostreSQL connection (stored in a separate file)
+
+require('dotenv').config();
 
 const Pool = require('pg').Pool
 const pool = new Pool({
-  user: 'me',
-  host: 'localhost',
-  database: 'api',
-  password: 'password',
-  port: 5432,
+  user: process.env.USER,
+  host: process.env.HOST,
+  database: process.env.DATABASE,
+  password: process.env.PASSWORD,
+  port: process.env.PORT,
 })
 
 // GET all users
