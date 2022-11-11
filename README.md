@@ -14,7 +14,7 @@ Generic implementation of OGC API with Node.js, Express and PostgreSQL
 
 ## Start the server
 
-`node server.js`
+`node index.js`
 
 # References
 
