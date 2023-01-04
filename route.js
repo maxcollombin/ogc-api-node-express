@@ -6,12 +6,19 @@ var path = require('path');
 var fs = require('fs');
 const port = 3000; // could be imported from another file instead
 
-// Get a list of all the files in the data directory
+// List the files in the data directory
 
-var files = fs.readdirSync(path.join(__dirname, "data")).filter(fn => fn.endsWith('.geojson'));
-for (i = 0; i < files.length; i++)
-  files[i] = files[i].replace(/\.[^/.]+$/, "");
-console.log(files)
+var fileNames = fs.readdirSync(path.join(__dirname, "data")).filter(fn => fn.endsWith('.geojson'));
+
+var dataDict = {};
+fileNames.forEach(fileName => {
+  var rawData = fs.readFileSync(path.join(__dirname, "data", fileName));
+  var geojson = JSON.parse(rawData);
+
+  var fn = fileName.replace(/\.[^/.]+$/, "");
+
+  dataDict[fn] = geojson;
+});
 
 // Landing page
 
@@ -23,15 +30,16 @@ router.get('/', function (req, res) {
 // Collections
 
 router.get('/collections', function (req, res) {
-  res.json(make.collections(files));
+  res.json(make.collections(dataDict));
 })
 
-// Collection by ID
+// Collection
 
 router.get('/collections/:collectionId', function (req, res) {
 
-  if (!files.includes(req.params.collectionId))
+  if (null == dataDict[req.params.collectionId])
   {
+    // If the parameter collectionId does not exist on the server, the status code of the response will be 404
     res.status(404).send("The requested URL " + req.url + " was not found on this server");
     return;
   }
@@ -42,8 +50,8 @@ router.get('/collections/:collectionId', function (req, res) {
 
 // Collection items
 
-router.get('/collections/:collectionId/items', function(req, res) {
-    res.send('Collection items')
+router.get('/collections/:collectionId/items', function (req, res) {
+    res.json(make.items(req.params.collectionId, dataDict[req.params.collectionId]));
 })
 
 // Collection queryables

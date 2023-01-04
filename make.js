@@ -50,13 +50,11 @@ function collectionsJSON(collections) {
     
     json.collections = [];
 
-    collections.forEach(collection => {
-       var item = header(collection, collection);
-       item.links.push(link(serviceUrl + "collections/" + collection + "/items", "item", "application/json", collection));
-       json.collections.push(item);
-    });
-
-console.log(json);
+    for (var collectionId in collections) {
+        var item = header(collectionId, collectionId);
+        item.links.push(link(serviceUrl + "collections/" + collectionId, "self", "application/json", collectionId));
+        json.collections.push(item);
+     };
 
     return json;
 }
@@ -65,7 +63,7 @@ function collections(collections) {
     return collectionsJSON(collections);
 }
 
-// Collection by ID
+// Collection
 
 function collectionJSON(collection) {
     var json = {}
@@ -86,4 +84,16 @@ function collection(collectionId) {
     return collectionJSON(collectionId);
 }
 
-module.exports = {landingPage, collections, collection}
+// Collection queryables
+
+// Collection items
+
+function itemsJSON(collectionId, geojson) {
+    return JSON.parse(JSON.stringify(geojson));
+}
+
+function items(collectionId, geojson) {
+    return itemsJSON(collectionId, geojson);
+}
+
+module.exports = {landingPage, collections, collection, items}
