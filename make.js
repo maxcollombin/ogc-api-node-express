@@ -29,7 +29,7 @@ function landingPageJSON() {
     var json = header(serviceTitle, serviceDescription);
     
     json.links.push(link(serviceUrl,                 "self",         "application/json", "This document as JSON"));
-    json.links.push(link(serviceUrl + "openapi",         "service-desc", "application/vnd.oai.openapi+json;version=3.0", "The OpenAPI definition as JSON"));
+    json.links.push(link(serviceUrl + "openapi",     "service-desc", "application/vnd.oai.openapi+json;version=3.0", "The OpenAPI definition as JSON"));
     json.links.push(link(serviceUrl + "conformance", "conformance",  "application/json", "OGC API conformance classes implemented by this server"));
     json.links.push(link(serviceUrl + "collections", "data",         "application/json", "Information about the feature collections"));
     
@@ -65,4 +65,25 @@ function collections(collections) {
     return collectionsJSON(collections);
 }
 
-module.exports = {landingPage, collections}
+// Collection by ID
+
+function collectionJSON(collection) {
+    var json = {}
+
+    json.links = []
+    json.links.push(link(serviceUrl + "collections", "self", "application/json", "Metadata about the feature collections"));
+    
+    json.collections = [];
+
+    var item = header(collection, collection);
+    item.links.push(link(serviceUrl + "collections/" + collection + "/items", "item", "application/json", collection));
+    json.collections.push(item);
+
+    return json;
+}
+
+function collection(collectionId) {
+    return collectionJSON(collectionId);
+}
+
+module.exports = {landingPage, collections, collection}

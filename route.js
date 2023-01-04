@@ -20,24 +20,24 @@ router.get('/', function (req, res) {
   res.json(make.landingPage(urlParts.query.f))
 })
 
-// // Collections 
-
-// router.get('/collections', function(req, res) {
-//   res.send('Collections in this service')
-// })
-
 // Collections
 
 router.get('/collections', function (req, res) {
-  // var urlParts = url.parse(req.url, true);
   res.json(make.collections(files));
 })
 
 // Collection by ID
 
-router.get('/collections/:collectionId', function(req, res) {
-  console.log(req.params);
-  res.send('Collection by ID')
+router.get('/collections/:collectionId', function (req, res) {
+
+  if (!files.includes(req.params.collectionId))
+  {
+    res.status(404).send("The requested URL " + req.url + " was not found on this server");
+    return;
+  }
+
+  var urlParts = url.parse(req.url, true);
+  res.json(make.collection(req.params.collectionId));
 })
 
 // Collection items
