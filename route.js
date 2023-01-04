@@ -1,26 +1,36 @@
 var express = require('express')
 var router = express.Router()
-var make = require('./landingPage');
+var url = require('url');
+var make = require('./make');
+var path = require('path');
+var fs = require('fs');
 const port = 3000; // could be imported from another file instead
+
+// Get a list of all the files in the data directory
+
+var files = fs.readdirSync(path.join(__dirname, "data")).filter(fn => fn.endsWith('.geojson'));
+for (i = 0; i < files.length; i++)
+  files[i] = files[i].replace(/\.[^/.]+$/, "");
+console.log(files)
 
 // Landing page
 
-router.get('/', function(req, res) {
-
-  var landingPage = make.header("OGC API Features",                "Implementation of the OGC API Features suite of standards with Node and Express");
-  landingPage.links.push(make.item(`http://localhost:${port}/`,            "self",         "application/json", "This document as JSON"));
-  landingPage.links.push(make.item(`http://localhost:${port}/openapi`,     "service-desc", "application/vnd.oai.openapi+json;version=3.0", "The OpenAPI definition as JSON"));
-  landingPage.links.push(make.item(`http://localhost:${port}/conformance`, "conformance",  "application/json", "OGC API conformance classes implemented by this server"));
-  landingPage.links.push(make.item(`http://localhost:${port}/collections`, "data",         "application/json", "Information about the feature collections"));
-
-  res.json(landingPage)
-
+router.get('/', function (req, res) {
+  var urlParts = url.parse(req.url, true);
+  res.json(make.landingPage(urlParts.query.f))
 })
 
-// Collections 
+// // Collections 
 
-router.get('/collections', function(req, res) {
-  res.send('Collections in this service')
+// router.get('/collections', function(req, res) {
+//   res.send('Collections in this service')
+// })
+
+// Collections
+
+router.get('/collections', function (req, res) {
+  // var urlParts = url.parse(req.url, true);
+  res.json(make.collections(files));
 })
 
 // Collection by ID
