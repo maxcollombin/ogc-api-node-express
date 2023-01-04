@@ -1,10 +1,20 @@
 var express = require('express')
 var router = express.Router()
+var make = require('./landingPage');
+const port = 3000; // could be imported from another file instead
 
 // Landing page
 
 router.get('/', function(req, res) {
-    res.send('Landing page')
+
+  var landingPage = make.header("OGC API Features",                "Implementation of the OGC API Features suite of standards with Node and Express");
+  landingPage.links.push(make.item(`http://localhost:${port}/`,            "self",         "application/json", "This document as JSON"));
+  landingPage.links.push(make.item(`http://localhost:${port}/openapi`,     "service-desc", "application/vnd.oai.openapi+json;version=3.0", "The OpenAPI definition as JSON"));
+  landingPage.links.push(make.item(`http://localhost:${port}/conformance`, "conformance",  "application/json", "OGC API conformance classes implemented by this server"));
+  landingPage.links.push(make.item(`http://localhost:${port}/collections`, "data",         "application/json", "Information about the feature collections"));
+
+  res.json(landingPage)
+
 })
 
 // Collections 
@@ -48,7 +58,15 @@ router.get('/openapi', function(req, res) {
 // Conformance declaration
 
 router.get('/conformance', function(req, res) {
-    res.send('Conformance declaration')
+
+  var conformance = {};
+  conformance.conformsTo = [];
+  conformance.conformsTo.push("http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/core");
+  conformance.conformsTo.push("http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/oas30");
+  conformance.conformsTo.push("http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/html");
+  conformance.conformsTo.push("http://www.opengis.net/spec/ogcapi-features-1/1.0/conf/geojson");
+  res.json(conformance)
+
 })
 
 module.exports = router
