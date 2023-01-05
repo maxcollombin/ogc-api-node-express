@@ -8,17 +8,16 @@ Generic implementation of OGC API with Node.js, Express and PostgreSQL
 
 ## To do:
 
-- [] Add a Dockerfile
-- [] Add the queryables endpoints
-- [] Add the openapi endpoint
-- [] Add the items id endpoints
-- [] Add the extent parameter
-- [] Add the bbox parameter
-- [] Add the limit parameter
-- [] Add the offset parameter
-- [] Add the datetime parameter
-- [] Adapt the file and directory structure
-- [] Add the required modules in the package.json file
+- [  ] Add the queryables endpoints
+- [  ] Add the openapi endpoint
+- [  ] Add the items id endpoints
+- [  ] Add the extent parameter
+- [  ] Add the bbox parameter
+- [  ] Add the limit parameter
+- [  ] Add the offset parameter
+- [  ] Add the datetime parameter
+- [  ] Adapt the file and directory structure
+- [  ] Add the required modules in the package.json file
  
 
 
